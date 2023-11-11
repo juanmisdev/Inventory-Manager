@@ -37,6 +37,7 @@
             label2 = new Label();
             button2 = new Button();
             btnExcel = new Button();
+            Eliminar = new Button();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dataGridView2).BeginInit();
             SuspendLayout();
@@ -45,7 +46,7 @@
             // 
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView1.Location = new Point(8, 7);
-            dataGridView1.Margin = new Padding(2, 2, 2, 2);
+            dataGridView1.Margin = new Padding(2);
             dataGridView1.Name = "dataGridView1";
             dataGridView1.RowHeadersWidth = 62;
             dataGridView1.RowTemplate.Height = 33;
@@ -70,7 +71,7 @@
             btnAumentarCantidad.Font = new Font("Segoe UI", 20F, FontStyle.Regular, GraphicsUnit.Point);
             btnAumentarCantidad.Image = Properties.Resources.flecha_arriba;
             btnAumentarCantidad.Location = new Point(970, 33);
-            btnAumentarCantidad.Margin = new Padding(2, 2, 2, 2);
+            btnAumentarCantidad.Margin = new Padding(2);
             btnAumentarCantidad.Name = "btnAumentarCantidad";
             btnAumentarCantidad.Size = new Size(39, 29);
             btnAumentarCantidad.TabIndex = 2;
@@ -83,7 +84,7 @@
             button1.Font = new Font("Segoe UI", 20F, FontStyle.Regular, GraphicsUnit.Point);
             button1.Image = Properties.Resources.flecha_abajo;
             button1.Location = new Point(970, 66);
-            button1.Margin = new Padding(2, 2, 2, 2);
+            button1.Margin = new Padding(2);
             button1.Name = "button1";
             button1.Size = new Size(39, 31);
             button1.TabIndex = 3;
@@ -105,7 +106,7 @@
             // 
             dataGridView2.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView2.Location = new Point(690, 187);
-            dataGridView2.Margin = new Padding(2, 2, 2, 2);
+            dataGridView2.Margin = new Padding(2);
             dataGridView2.Name = "dataGridView2";
             dataGridView2.RowHeadersWidth = 62;
             dataGridView2.RowTemplate.Height = 33;
@@ -124,8 +125,8 @@
             // 
             // button2
             // 
-            button2.Location = new Point(8, 567);
-            button2.Margin = new Padding(2, 2, 2, 2);
+            button2.Location = new Point(11, 570);
+            button2.Margin = new Padding(2);
             button2.Name = "button2";
             button2.Size = new Size(145, 32);
             button2.TabIndex = 7;
@@ -135,20 +136,31 @@
             // 
             // btnExcel
             // 
-            btnExcel.Location = new Point(699, 567);
-            btnExcel.Margin = new Padding(2, 2, 2, 2);
+            btnExcel.Location = new Point(1209, 567);
+            btnExcel.Margin = new Padding(2);
             btnExcel.Name = "btnExcel";
             btnExcel.Size = new Size(137, 32);
             btnExcel.TabIndex = 8;
-            btnExcel.Text = "Excel";
+            btnExcel.Text = "Crear Tabla en Excel";
             btnExcel.UseVisualStyleBackColor = true;
             btnExcel.Click += btnExcel_Click;
+            // 
+            // Eliminar
+            // 
+            Eliminar.Location = new Point(1086, 569);
+            Eliminar.Name = "Eliminar";
+            Eliminar.Size = new Size(118, 29);
+            Eliminar.TabIndex = 9;
+            Eliminar.Text = "Eliminar";
+            Eliminar.UseVisualStyleBackColor = true;
+            Eliminar.Click += Eliminar_Click;
             // 
             // NuevoProyecto
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1357, 613);
+            Controls.Add(Eliminar);
             Controls.Add(btnExcel);
             Controls.Add(button2);
             Controls.Add(label2);
@@ -158,7 +170,7 @@
             Controls.Add(btnAumentarCantidad);
             Controls.Add(lblCantidad);
             Controls.Add(dataGridView1);
-            Margin = new Padding(2, 2, 2, 2);
+            Margin = new Padding(2);
             Name = "NuevoProyecto";
             Text = "Form1";
             Load += NuevoProyecto_Load;
@@ -179,5 +191,6 @@
         private Label label2;
         private Button button2;
         private Button btnExcel;
+        private Button Eliminar;
     }
 }

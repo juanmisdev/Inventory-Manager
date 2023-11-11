@@ -5,6 +5,8 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Linq;
+using MySqlX.XDevAPI.Relational;
 
 namespace ProyectoFinal
 {
@@ -126,6 +128,89 @@ namespace ProyectoFinal
             comando.Parameters.Clear();
             conexion.CerrarConexion();
             return id;
+        }
+
+        //Obtener todos los accesorios (con cantidad) de una lista de productos.
+       
+        public static DataTable AccesoriosDeUnaLista(List<int> id_productos, List<int>cantidad_productos, DataTable tabla)
+        {
+            // id productos contiene los id de los productos.
+            // cantidad productos contiene la cantidad del n producto (el valor en n = 0 sera la cantidad del primer producto)
+            // Es necesario multiplicarla cantidad de accesorios de ese producto por la cantidad del producto
+            // Esto obtiene los accesorios de un producto:
+            tabla.Clear();
+            tabla.Columns.Add("id", typeof(int));
+            tabla.Columns.Add("nombre", typeof(string));
+            tabla.Columns.Add("descripcion", typeof(string));
+            tabla.Columns.Add("precio", typeof(decimal));
+            tabla.Columns.Add("stock", typeof(int));
+            tabla.Columns.Add("cantidad_accesorios", typeof(long));
+
+            for (int i=0; i<id_productos.Count; i++)
+            {
+                DataTable tablaTemporal = new DataTable();
+                string cantidad = cantidad_productos[i].ToString();
+                string query = $"SELECT A.id, A.nombre, A.descripcion, A.precio, A.stock, (PA.cantidad_accesorios * {cantidad}) AS cantidad_accesorios FROM Producto AS P JOIN Producto_Accesorio AS PA ON P.id = PA.id_producto JOIN Accesorio AS A ON PA.id_accesorio = A.id WHERE P.id = {id_productos[i]};";
+                // Este query devuelve una tabla con los accesorios del producto
+                comando.Connection = conexion.AbrirConexion();
+                comando.CommandText = query;
+                comando.CommandType = CommandType.Text;
+                leer = comando.ExecuteReader();
+                tablaTemporal.Load(leer);
+
+                foreach (DataRow row in tablaTemporal.Rows)
+                {
+                    DataRow newRow = tabla.NewRow();
+
+                    // Copia los valores de la fila de tabla2 a una nueva fila en tabla1
+                    foreach (DataColumn col in tablaTemporal.Columns)
+                    {
+                        newRow[col.ColumnName] = row[col.ColumnName];
+                    }
+
+                    tabla.Rows.Add(newRow);
+                }
+
+                // Esta tabla contendra todos los valores de los accesorios de todos los productos pero repetidos.
+            }
+           
+
+            // Queremos que no aparezcan accesorios repetidos y se sumen las cantidades con ids igua
+            // Creamos una nueva DataTable para los resultados
+            DataTable resultado = new DataTable();
+            resultado.Clear();
+            resultado.Columns.Add("cantidad", typeof(long));
+            resultado.Columns.Add("id", typeof(int));
+            resultado.Columns.Add("nombre", typeof(string));
+            resultado.Columns.Add("descripcion", typeof(string));
+            resultado.Columns.Add("precio", typeof(decimal));
+            resultado.Columns.Add("stock", typeof(int));
+            
+
+            // Agrupamos los accesorios por su ID y calculamos la suma de la cantidad para cada grupo. (Utilizando un linq)
+            var grupos = from accesorio in tabla.AsEnumerable()
+                         group accesorio by accesorio.Field<int>("id") into grp
+                         select new
+                         {
+                             Id = grp.Key,
+                             Nombre = grp.First()["nombre"],
+                             Descripcion = grp.First()["descripcion"],
+                             Precio = grp.First()["precio"],
+                             Stock = grp.First()["stock"],
+                             Cantidad = grp.Sum(acc => Convert.ToInt32(acc.Field<long>("cantidad_accesorios"))),
+                         };
+
+            // Agregamos los resultados al nuevo DataTable
+            foreach (var grupo in grupos)
+            {
+                resultado.Rows.Add(grupo.Cantidad, grupo.Id, grupo.Nombre, grupo.Descripcion, grupo.Precio, grupo.Stock );
+            }
+
+            // Ahora, el DataTable "resultado" contiene los accesorios con los IDs repetidos combinados y la cantidad acumulada.
+
+            conexion.CerrarConexion();
+            leer.Close();
+            return resultado;
         }
     }
 }

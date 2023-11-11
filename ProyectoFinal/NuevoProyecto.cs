@@ -80,6 +80,7 @@ namespace ProyectoFinal
 
 
                 tabla_proyecto.Rows.Add(cantidad, id, nombre, descripcion, precio, stock);
+                lblCantidad.Text = "1";
             }
             else
             {
@@ -89,13 +90,26 @@ namespace ProyectoFinal
 
         private void btnExcel_Click(object sender, EventArgs e)
         {
-            ExcelConexion.ExportDataTableToExcel(tabla_proyecto);
 
+            ExcelConexion.ExportDataTableToExcel(tabla_proyecto);
         }
 
         private void label1_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void Eliminar_Click(object sender, EventArgs e)
+        {
+            if (dataGridView2.SelectedRows.Count > 0)
+            {
+                int indice_seleccionado = dataGridView2.SelectedRows[0].Index;
+                dataGridView2.Rows.RemoveAt(indice_seleccionado);
+            }
+            else
+            {
+                MessageBox.Show("Debe seleccionar un producto de su proyecto para borrarlo. Para hacerlo haga click en la parte izquierda de la tabla");
+            }
         }
     }
 
